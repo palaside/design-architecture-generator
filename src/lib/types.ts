@@ -128,11 +128,11 @@ export interface GenerateInput {
 }
 
 export const PILLARS = [
-  { key: "prompt", label: "Prompt Engineering", labelTh: "วิศวกรรมพรอมต์", emoji: "🎯", accent: "violet" },
-  { key: "context", label: "Context Engineering", labelTh: "วิศวกรรมบริบท", emoji: "🧠", accent: "sky" },
-  { key: "harness", label: "Harness Engineering", labelTh: "วิศวกรรมโครงรัด", emoji: "🛡️", accent: "emerald" },
-  { key: "loop", label: "Loop Engineering", labelTh: "วิศวกรรมลูปทำงาน", emoji: "🔁", accent: "amber" },
-  { key: "graph", label: "Graph Engineering", labelTh: "วิศวกรรมการนำเสนอผล", emoji: "📊", accent: "rose" },
+  { key: "brand", label: "Brand Identity & Mood", labelTh: "อัตลักษณ์และอารมณ์แบรนด์", emoji: "🎨", accent: "violet" },
+  { key: "visual", label: "Visual Language", labelTh: "คู่มือภาษาภาพ", emoji: "✨", accent: "sky" },
+  { key: "layout", label: "Layout & Navigation", labelTh: "เลย์เอาต์และการนำทางหลัก", emoji: "📐", accent: "emerald" },
+  { key: "components", label: "UI Component Specs", labelTh: "ข้อกำหนดชิ้นส่วน UI", emoji: "🧱", accent: "amber" },
+  { key: "ux", label: "UX & Micro-interactions", labelTh: "พฤติกรรมผู้ใช้และอนิเมชัน", emoji: "⚡", accent: "rose" },
 ] as const;
 
 export type PillarKey = (typeof PILLARS)[number]["key"];
