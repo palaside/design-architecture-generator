@@ -93,61 +93,61 @@ function visualPillar(a: Analysis, input: GenerateInput): Draft[] {
       key: "color_primary",
       th: "Primary & Accent Colors — สีหลักและสีเน้น",
       en: "Primary Colors",
-      summary: "โทนสีหลักที่ระบุอัตลักษณ์เด่นชัดของระบบ รวมถึงสีรองและสีพื้นฐาน",
-      body: "สีหลัก: #FF6B6B (Salmon Pink), สีเน้น: #4D96FF (Sky Blue)",
-      snippet: "<colors_primary>Primary: #FF6B6B, Accent: #4D96FF</colors_primary>",
-      checklist: ["ระบุรหัสสีแบบ Hex Code ชัดเจน"],
-      antiPatterns: ["ไม่มีสีเน้นทำให้อัตลักษณ์หน้าจอจม"]
+      summary: "โทนสีหลักสะท้อนอัตลักษณ์ตามระบบ Impeccable (Neo Kinpaku Gold และ Verdigris Patina)",
+      body: "สีหลัก (Primary Accent): oklch(84% 0.19 80.46) [Kinpaku Gold - ทองคำเปลวเปล่งประกาย], สีเน้นร่วม (Secondary State): oklch(70% 0.12 188) [Verdigris Patina - ทองแดงขึ้นสนิมคลาสสิก]",
+      snippet: "<colors_primary>Primary Gold: oklch(84% 0.19 80.46), Accent Patina: oklch(70% 0.12 188)</colors_primary>",
+      checklist: ["ระบุรหัสสีสัดส่วนชัดเจนตามระบบ Kinpaku", "หลีกเลี่ยงการใช้คู่สีเกรดพื้นฐานไร้มิติ"],
+      antiPatterns: ["ใช้คู่สีเกรดมาตรฐาน AI-generated ทั่วไป (เช่น Pure Blue, Pure Red)"]
     },
     {
       key: "color_secondary",
       th: "Secondary & Neutral Colors — สีรองและสีกลาง",
       en: "Secondary & Neutral Colors",
-      summary: "กำหนดกลุ่มสีกลางสำหรับพื้นหลัง ตัวอักษร และขอบต่าง ๆ ของหน้าแอป",
-      body: "พื้นหลังเบา: #F9FAFB, สีขอบเทา: #E5E7EB, ตัวอักษรหลัก: #1F2937",
-      snippet: "<colors_neutral>Background: #F9FAFB, Border: #E5E7EB, Text: #1F2937</colors_neutral>",
-      checklist: ["มีสีเทาและสีพื้นหลังที่ชัดเจน"],
-      antiPatterns: ["ใช้สีดาร์กโหมดปะปนกับไลท์โหมดโดยไม่มีสไตล์คุม"]
+      summary: "กำหนดกลุ่มสีพื้นหลังและสีตัวอักษรเพื่อคุมความสง่างามตามแบบฉบับพรีเมียม",
+      body: "พื้นหลังแอป (Lacquer Ground): oklch(7% 0.006 95) [Warm-black Lacquer - รักดำอุ่นเข้ม], กล่องข้อความ (Raised Lacquer): oklch(11% 0.006 95), ตัวอักษรหลัก (Champagne): oklch(91% 0 0), คำอธิบาย (Text Muted): oklch(72% 0 0)",
+      snippet: "<colors_neutral>Background Lacquer: oklch(7% 0.006 95), Panel Raised: oklch(11% 0.006 95), Text Champagne: oklch(91% 0 0)</colors_neutral>",
+      checklist: ["มีน้ำหนักพื้นหลังต่างกันอย่างน้อย 3 ระดับเพื่อสร้างความลึก (lacquer-deep, lacquer-black, raised-lacquer)"],
+      antiPatterns: ["ใช้สี Pure Black (#000) หรือ Pure White (#FFF) ล้นหน้าจอจนดูไร้มิติและขาดรสนิยม"]
     },
     {
       key: "typography_tokens",
       th: "Typography Tokens — ขนาดและน้ำหนักฟอนต์",
       en: "Typography Tokens",
-      summary: "ข้อกำหนดมาตราส่วนขนาดฟอนต์สำหรับการนำไปใช้งานในโค้ด",
-      body: "หัวข้อหลัก: 24px/Bold, หัวข้อรอง: 18px/Semi-Bold, เนื้อหา: 14px/Regular, ตัวหนังสือเล็ก: 12px",
-      snippet: "<typo_tokens>H1: 24px/700, Body: 14px/400</typo_tokens>",
-      checklist: ["ระบุสเกลขนาดตัวอักษรครบถ้วน"],
-      antiPatterns: ["ตั้งขนาดฟอนต์สะเปะสะปะตามความชอบรายหน้าจอ"]
+      summary: "ข้อกำหนดมาตราส่วนขนาดฟอนต์ โดยมีกฎเหล็กสั่งห้ามตัวอักษรเอียงบนหัวข้อ",
+      body: "หัวข้อหลัก: 24px/Bold (Roman), หัวข้อรอง: 18px/Semi-Bold (Roman), เนื้อหา: 14px/Regular, **กฎเหล็ก Hallmark: หัวข้อและเมนูทั้งหมดห้ามทำเอียง (Italic Headers Forbidden) ให้คงความเปี่ยมศิลปะด้วยรูปแบบปกติเท่านั้น**",
+      snippet: "<typo_tokens>H1: 24px/700 (Roman-only, no italics), Body: 14px/400</typo_tokens>",
+      checklist: ["หัวข้อเด่นคงสถานะปกติไม่เอนเอียง (Upright/Roman Display Typography)", "ระบุสเกลขนาดตัวอักษรคุมน้ำหนักที่เหมาะสม"],
+      antiPatterns: ["ใช้หัวข้อตัวเอียง (Italic Display) ซึ่งเป็นจุดอ่อนบ่งชี้ดีไซน์สลอปที่เกิดจากระบบ AI ทั่วไป"]
     },
     {
       key: "spacing_scale",
       th: "Spacing Scale — มาตราส่วนระยะห่าง",
       en: "Spacing Scale",
-      summary: "สเกลสำหรับระยะห่าง Margin และ Padding ที่ล้อไปกับสเกล 8px คีย์เวิร์ด",
-      body: "กำหนดสเกลหลัก: 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px",
+      summary: "สเกลสำหรับระยะห่าง Margin และ Padding ที่ล้อไปกับมาตราฐาน 8px คีย์เวิร์ด",
+      body: "กำหนดสเกลหลัก: 4px, 8px, 12px, 16px, 24px, 32px, 48px, 64px เพื่อสร้างจังหวะสายตาที่สง่างาม",
       snippet: "<spacing>Base: 8px, Scale: 4px-8px-12px-16px-24px-32px</spacing>",
       checklist: ["ยึดตามหลักการ Spacing System เลขคู่"],
-      antiPatterns: ["มีระยะห่าง 7px หรือ 11px ปะปนมาโดยไม่มีเหตุผล"]
+      antiPatterns: ["ใช้ระยะห่างสะเปะสะปะคี่คู่ปนกันอย่างไร้มาตรฐาน"]
     },
     {
       key: "grid_system",
       th: "Grid & Column Scales — ระบบกริดจัดหน้าแอป",
       en: "Grid System",
-      summary: "ระบบกริดและเลย์เอาต์เพื่อการออกแบบหน้าจอที่ยืดหยุ่นตาม Responsive Grid",
-      body: "จอ Desktop: 12 คอลัมน์ (Gutter: 24px), จอ Mobile: 4 คอลัมน์ (Gutter: 16px)",
+      summary: "ระบบกริดและเลย์เอาต์เพื่อการออกแบบหน้าจอที่ยืดหยุ่นตามโครงสร้างเฉพาะตัว",
+      body: "จอ Desktop: 12 คอลัมน์ (Gutter: 24px), จอ Mobile: 4 คอลัมน์ (Gutter: 16px), หลีกเลี่ยงเลย์เอาต์สำเร็จรูปพิมพ์นิยม",
       snippet: "<grids>Desktop: 12 columns, Mobile: 4 columns</grids>",
-      checklist: ["ระบุจำนวนคอลัมน์ของหน้าจอแต่ละแบบ"],
-      antiPatterns: ["ออกแบบ Layout แบบ Fix ขนาดกว้างตายตัว"]
+      checklist: ["ปรับแต่งโครงสร้างหน้าจอให้มีจุดโฟกัสเด่นชัดดึงดูดสายตา"],
+      antiPatterns: ["ใช้การวางกล่องบล็อกแบ่งคอลัมน์ซ้ำซากเท่ากันทุกส่วนจนหน้าจอขาดเสน่ห์"]
     },
     {
       key: "effects_shadows",
       th: "Shadows, Borders & Elevations — เงา ขอบ และมิติ",
       en: "Shadows & Borders",
-      summary: "มิติความลึก (Elevation) และเงาตกกระทบสำหรับกล่องข้อความและการ์ดต่าง ๆ",
-      body: "กรอบมนการ์ด: 8px, เงาระดับต่ำ: 0 1px 3px rgba(0,0,0,0.1), เงาเด่น: 0 4px 6px rgba(0,0,0,0.1)",
-      snippet: "<effects>Border Radius: 8px, Shadow-sm: 0 1px 2px rgba(0,0,0,0.05)</effects>",
-      checklist: ["ระบุขนาด Border Radius", "ระบุรายละเอียดการใช้เงา"],
-      antiPatterns: ["ใช้เงาที่ทึบและดำเกินไปจนทำให้งานดูไม่สะอาดตา"]
+      summary: "ความตื้นลึกของอินเตอร์เฟซโดยใช้เส้นผมบาง (Hairline) แทนเงาดำฟุ้งสไตล์ AI",
+      body: "เน้นการล้อมกรอบด้วยเส้นเด่นบางเฉียบ (Gold Hairline: oklch(78% 0 0 / 16%)) และการซ้อนบานกระจก (Glassmorphism / Glass Panel) ร่วมกับการสะท้อนแสงขอบคม ไม่เน้นใช้เงาทอดทึบหนาเตอะ",
+      snippet: "<effects>Border Radius: 8px, Hairline: 1px solid oklch(78% 0 0 / 16%), Shadow: none or ultra-thin</effects>",
+      checklist: ["ใช้เส้นแบ่งบางเฉียบสร้างมิติแทนการทอดเงาขนาดใหญ่", "กำหนดรัศมีความมน (Border Radius) ที่สมดุล"],
+      antiPatterns: ["ประโคมใส่เงาฟุ้งดำทึบหนาเฉกเช่นตัวอย่าง UI ราคาถูกหรือสลอปสำเร็จรูปของ AI"]
     }
   ];
 }
