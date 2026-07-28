@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { CopyButton } from "@/components/CopyButton";
 import { Markdown } from "@/components/Markdown";
+import { WireframeCanvas } from "@/components/WireframeCanvas";
 import type { Analysis, CompiledSection, ReversePrompt, TechStack } from "@/lib/types";
 import { PILLARS } from "@/lib/types";
 
@@ -36,14 +37,15 @@ interface Props {
 }
 
 const TABS = [
-  { key: "overview", label: "ภาพรวม & Tech Stack", emoji: "🧭" },
+  { key: "overview", label: "ภาพรวม & Design Tokens", emoji: "🧭" },
   { key: "reverse", label: "Reverse Prompt", emoji: "🔄" },
-  { key: "prompt", label: "1 · Prompt", emoji: "🎯" },
-  { key: "context", label: "2 · Context", emoji: "🧠" },
-  { key: "harness", label: "3 · Harness", emoji: "🛡️" },
-  { key: "loop", label: "4 · Loop", emoji: "🔁" },
-  { key: "graph", label: "5 · Graph", emoji: "📊" },
-  { key: "master", label: "Master Prompt", emoji: "📜" },
+  { key: "brand", label: "1 · Brand Mood", emoji: "🎨" },
+  { key: "visual", label: "2 · Visual Scale", emoji: "✨" },
+  { key: "layout", label: "3 · Navigation", emoji: "📐" },
+  { key: "components", label: "4 · UI Specs", emoji: "🧱" },
+  { key: "ux", label: "5 · UX Patterns", emoji: "⚡" },
+  { key: "wireframe", label: "Wireframe Sandbox", emoji: "✏️" },
+  { key: "master", label: "Master Spec", emoji: "📜" },
   { key: "meta", label: "Meta-Prompt", emoji: "🧬" },
   { key: "trace", label: "Trace", emoji: "📈" },
 ];
@@ -140,11 +142,14 @@ export function BlueprintView(props: Props) {
         {PILLARS.map((p) =>
           tab === p.key ? <PillarPanel key={p.key} pillar={p.label} pillarTh={p.labelTh} sections={pillarSections[p.key] ?? []} /> : null,
         )}
+        {tab === "wireframe" ? (
+          <WireframeCanvas sections={props.sections} />
+        ) : null}
         {tab === "master" ? (
           <PromptPanel
             id={props.id}
-            title="MASTER PROMPT 360°"
-            description="พรอมต์ประกอบร่างจากทั้ง 30 หัวข้อ เรียงลำดับพร้อมใช้งานจริง — คัดลอกไปวางเป็น System Prompt ได้ทันที"
+            title="MASTER SPECS 360°"
+            description="ข้อกำหนดงานออกแบบประกอบร่างจากทั้ง 30 หัวข้อ เรียงลำดับพร้อมใช้สำหรับส่งต่อให้ดีไซเนอร์และโปรแกรมเมอร์"
             content={props.masterPrompt}
             downloadFormat="master"
           />
@@ -152,8 +157,8 @@ export function BlueprintView(props: Props) {
         {tab === "meta" ? (
           <PromptPanel
             id={props.id}
-            title="META-PROMPT (พรอมต์สำหรับสั่ง AI ให้สร้าง Prompt)"
-            description="วางบล็อกนี้เป็น System Prompt ของ AI แล้วส่งความต้องการสั้นๆ เข้าไป AI จะผลิตพรอมต์ 360° ให้คุณเองทั้งกระบวนการ 8 ขั้น"
+            title="META-PROMPT (สำหรับให้ AI ผลิตดีไซน์)"
+            description="ใช้สั่ง AI ให้ช่วยร่าง UI/UX Design System และคุมงานภาพของระบบสเกลอื่นๆ ตามความเหมาะสม"
             content={props.metaPrompt}
             downloadFormat="meta"
           />
@@ -430,8 +435,42 @@ function ReverseSection({
 
 /* ----------------------------- PILLARS ------------------------------ */
 function PillarPanel({ pillar, pillarTh, sections }: { pillar: string; pillarTh: string; sections: CompiledSection[] }) {
+  const [orderedSections, setOrderedSections] = useState<CompiledSection[]>(sections);
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
+
+  // Sync state if props change
+  useMemo(() => {
+    setOrderedSections(sections);
+  }, [sections]);
+
   const [open, setOpen] = useState<string | null>(sections[0]?.sectionKey ?? null);
-  const allSnippets = sections.map((s) => s.promptSnippet).join("\n\n");
+  const allSnippets = orderedSections.map((s) => s.promptSnippet).join("\n\n");
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIdx(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIdx === null || draggedIdx === index) return;
+    
+    const items = [...orderedSections];
+    const [draggedItem] = items.splice(draggedIdx, 1);
+    items.splice(index, 0, draggedItem);
+    
+    const updated = items.map((item, idx) => ({
+      ...item,
+      sectionOrder: idx + 1,
+    }));
+    
+    setOrderedSections(updated);
+    setDraggedIdx(null);
+  };
 
   return (
     <div className="fade-up space-y-3">
@@ -439,29 +478,45 @@ function PillarPanel({ pillar, pillarTh, sections }: { pillar: string; pillarTh:
         <div>
           <h2 className="text-lg font-bold text-white">{pillar}</h2>
           <p className="text-[12.5px] text-slate-400">
-            {pillarTh} · {sections.length} หัวข้อ · ~{sections.reduce((s, x) => s + x.tokenEstimate, 0).toLocaleString("th-TH")} tokens
+            {pillarTh} · {orderedSections.length} หัวข้อ · ~{orderedSections.reduce((s, x) => s + x.tokenEstimate, 0).toLocaleString("th-TH")} tokens
           </p>
         </div>
         <CopyButton text={allSnippets} label="คัดลอก Prompt Snippet ทั้งเสา" />
       </div>
 
-      {sections.map((s) => {
+      {orderedSections.map((s, idx) => {
         const isOpen = open === s.sectionKey;
+        const isDraggingThis = draggedIdx === idx;
         return (
-          <div key={s.sectionKey} className="glass overflow-hidden rounded-2xl">
-            <button
-              onClick={() => setOpen(isOpen ? null : s.sectionKey)}
-              className="flex w-full items-start gap-3 p-4 text-left transition hover:bg-white/[0.03]"
-            >
-              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-violet-500/30 to-sky-500/20 text-[11.5px] font-bold text-violet-100">
-                {s.pillarOrder}.{s.sectionOrder}
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-[14px] font-semibold text-white">{s.titleTh}</span>
-                <span className="mt-0.5 block text-[12.5px] leading-relaxed text-slate-400">{s.summary}</span>
-              </span>
-              <span className={`mt-1 shrink-0 text-slate-500 transition ${isOpen ? "rotate-180" : ""}`}>▾</span>
-            </button>
+          <div
+            key={s.sectionKey}
+            draggable
+            onDragStart={(e) => handleDragStart(e, idx)}
+            onDragOver={(e) => handleDragOver(e, idx)}
+            onDrop={(e) => handleDrop(e, idx)}
+            className={`glass overflow-hidden rounded-2xl transition-all duration-200 ${
+              isDraggingThis ? "opacity-40 border border-violet-500/50 scale-[0.99]" : ""
+            }`}
+          >
+            <div className="flex w-full items-center pl-4 pr-1">
+              {/* Drag Handle */}
+              <div className="cursor-grab text-slate-500 hover:text-slate-300 pr-1 select-none text-[15px]">
+                ⋮⋮
+              </div>
+              <button
+                onClick={() => setOpen(isOpen ? null : s.sectionKey)}
+                className="flex flex-1 items-start gap-3 py-4 text-left transition hover:bg-white/[0.03]"
+              >
+                <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-violet-500/30 to-sky-500/20 text-[11.5px] font-bold text-violet-100">
+                  {s.pillarOrder}.{s.sectionOrder}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[14px] font-semibold text-white">{s.titleTh}</span>
+                  <span className="mt-0.5 block text-[12.5px] leading-relaxed text-slate-400">{s.summary}</span>
+                </span>
+                <span className={`mt-1 pr-3 shrink-0 text-slate-500 transition ${isOpen ? "rotate-180" : ""}`}>▾</span>
+              </button>
+            </div>
 
             {isOpen ? (
               <div className="border-t border-white/8 px-4 pb-5 pt-4">
