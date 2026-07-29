@@ -84,19 +84,7 @@ export function GeneratorForm() {
         className="w-full resize-y rounded-2xl border border-white/12 bg-black/35 p-4 text-[15px] text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-violet-400/60 focus:ring-4 focus:ring-violet-500/15 disabled:opacity-60"
       />
 
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {EXAMPLES.map((ex) => (
-          <button
-            key={ex}
-            type="button"
-            disabled={loading}
-            onClick={() => setRequirement(ex)}
-            className="rounded-full border border-white/12 bg-white/5 px-3 py-1 text-[11.5px] text-slate-300 transition hover:border-violet-400/50 hover:bg-violet-500/15 hover:text-white disabled:opacity-50"
-          >
-            {ex}
-          </button>
-        ))}
-      </div>
+
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Field label="ภาษาผลลัพธ์">
